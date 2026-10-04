@@ -81,10 +81,6 @@ uv run python scripts/download_yfinance_daily.py \
 uv run python scripts/build_yfinance_artifacts.py
 ```
 
-Full layout, request parameters and data-quality notes:
-[docs/YFINANCE_DAILY_DATASET.md](docs/YFINANCE_DAILY_DATASET.md) and
-[data/README.md](data/README.md).
-
 ## Installation
 
 Python **3.11**, managed with [uv](https://docs.astral.sh/uv/) and the
@@ -159,32 +155,6 @@ Computed metrics: accuracy, Brier (raw + calibrated), ECE (raw + calibrated),
 Precision@3 (cross-sectional UP/DOWN), F1 and ROC-AUC. They are written to
 `$AGENTIC_OUTPUT_ROOT`, not to the repository.
 
-## Explanations and Reports
-
-```bash
-# One prediction with SHAP + attention evidence
-uv run python -m agentic_forecaster explain \
-    --model <bundle_dir> --data <processed_dir> --index -1
-
-# Per-ticker HTML/PDF report
-uv run python -m agentic_forecaster report \
-    --config configs/reproduction_search/yfinance_adjusted.yaml --ticker RELIANCE
-
-# End-to-end smoke test: real data, SHAP, report, bundle reload
-uv run python scripts/smoke_test_real.py --ticker RELIANCE \
-    --config configs/reproduction_search/yfinance_adjusted.yaml
-
-# Full pipeline run (same implementation as scripts/reproduce_paper.py)
-uv run python -m agentic_forecaster reproduce-paper \
-    --config configs/reproduction_search/yfinance_adjusted.yaml --device auto
-```
-
-## Interactive Demo
-
-```bash
-uv run streamlit run app/streamlit_app.py                 # DEMO (synthetic) mode
-uv run streamlit run app/streamlit_app.py -- --mode real  # REAL mode (dataset + checkpoints)
-```
 
 ## Tests and Lint
 
@@ -197,15 +167,6 @@ uv run python -m agentic_forecaster train --ticker SYN00 --config configs/demo.y
 ```
 
 One network test is opt-in: `AGENTIC_RUN_NETWORK_TESTS=1 uv run pytest tests/unit/test_yfinance_download.py`.
-
-## Documentation
-
-- `docs/ARCHITECTURE.md` — pipeline and model architecture
-- `docs/PAPER_TRACEABILITY.md` — paper section → code mapping
-- `docs/IMPLEMENTATION_ASSUMPTIONS.md` — every reconstruction assumption
-- `docs/YFINANCE_DAILY_DATASET.md` — dataset construction and validation
-- `docs/REPRODUCIBILITY.md` — how to rerun the full pipeline
-- `docs/STORAGE_LAYOUT.md` — what lives in Git vs outside it
 
 ## Disclaimer
 
